@@ -1,0 +1,116 @@
+---
+import siteConfig from '../../config/site.json';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <p class="footer-wordmark">Urus Kredit Mudah</p>
+      <p class="footer-tagline">{siteConfig.tagline}</p>
+    </div>
+
+    <div class="footer-col">
+      <h3>Kategori</h3>
+      <ul>
+        {siteConfig.categories.map((cat) => (
+          <li><a href={`/panduan/kategori/${cat.slug}/`}>{cat.name}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h3>Hubungi</h3>
+      <ul>
+        <li><a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a></li>
+        <li><a href="/hubungi-kami/">Borang Hubungi Kami</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; {year} Urus Kredit Mudah. Hak cipta terpelihara.</p>
+    <p class="disclaimer">Kandungan di laman ini bertujuan sebagai panduan umum sahaja dan bukan nasihat kewangan profesional.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-primary);
+    color: #f2ece0;
+    margin-top: 4rem;
+  }
+
+  .footer-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 2rem;
+    display: grid;
+    gap: 2.5rem;
+    grid-template-columns: 1fr;
+  }
+
+  .footer-wordmark {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 0.4rem;
+  }
+
+  .footer-tagline {
+    color: #cddbd5;
+    margin: 0;
+    max-width: 32ch;
+  }
+
+  .footer-col h3 {
+    color: #fff;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-family: var(--font-mono);
+    margin-bottom: 0.9rem;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .footer-col a {
+    color: #dce6e1;
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  .footer-col a:hover {
+    color: var(--color-accent);
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 1.25rem 1.5rem 1.75rem;
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    font-size: 0.8rem;
+    color: #b7c7c0;
+  }
+
+  .disclaimer {
+    margin: 0;
+  }
+
+  @media (min-width: 700px) {
+    .footer-inner {
+      grid-template-columns: 1.4fr 1fr 1fr;
+    }
+  }
+</style>

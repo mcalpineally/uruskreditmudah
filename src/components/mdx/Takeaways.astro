@@ -1,0 +1,37 @@
+---
+interface Props {
+  title?: string;
+}
+const { title = 'Perkara Penting' } = Astro.props;
+---
+
+<div class="takeaways">
+  <h3>{title}</h3>
+  <ul>
+    <slot />
+  </ul>
+</div>
+
+<style>
+  .takeaways {
+    background: var(--color-paper-raised);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 1.4rem 1.6rem;
+    margin: 1.75rem 0;
+  }
+
+  .takeaways h3 {
+    margin-top: 0;
+    font-size: 1.05rem;
+  }
+
+  .takeaways ul {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+
+  .takeaways :global(li) {
+    margin: 0.5rem 0;
+  }
+</style>

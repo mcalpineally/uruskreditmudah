@@ -1,17 +1,225 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import siteConfig from '../config/site.json';
 
+const allGuides = await getCollection('guides', ({ data }) => data.lang === 'ms');
+const latestGuides = allGuides
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .slice(0, 6);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Panduan Kad Kredit, Pinjaman & Pengurusan Hutang" description={siteConfig.description}>
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Panduan kewangan peribadi</p>
+      <h1>Kredit yang keliru,<br /><span class="accent-text">jadi mudah</span> difahami.</h1>
+      <p class="hero-sub">{siteConfig.description}</p>
+
+      <div class="hero-path" aria-hidden="true">
+        <svg viewBox="0 0 600 90" preserveAspectRatio="none">
+          <path d="M10 70 C 150 10, 300 130, 590 20" fill="none" stroke="#c9c0aa" stroke-width="2" stroke-dasharray="1 10" stroke-linecap="round" />
+        </svg>
+        <span class="path-label path-start">Keliru</span>
+        <span class="path-label path-end">Jelas &amp; terkawal</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="categories">
+    <div class="section-inner">
+      <h2>Mula dari sini</h2>
+      <div class="category-grid">
+        {siteConfig.categories.map((cat) => (
+          <a href={`/panduan/kategori/${cat.slug}/`} class="category-card">
+            <span class="category-name">{cat.name}</span>
+            <span class="category-arrow">&rarr;</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="latest">
+    <div class="section-inner">
+      <h2>Panduan terkini</h2>
+      {latestGuides.length === 0 ? (
+        <p class="empty-state">Artikel akan muncul di sini sebaik sahaja diterbitkan.</p>
+      ) : (
+        <div class="guide-grid">
+          {latestGuides.map((guide) => (
+            <a href={`/panduan/${guide.id}/`} class="guide-card">
+              <span class="guide-category">{guide.data.category}</span>
+              <h3>{guide.data.title}</h3>
+              <p>{guide.data.description}</p>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: 4rem 1.5rem 2rem;
+  }
+
+  .hero-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.78rem;
+    color: var(--color-sage);
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-size: clamp(2.1rem, 5vw, 3.4rem);
+    font-weight: 600;
+  }
+
+  .accent-text {
+    color: var(--color-accent-dark);
+    font-style: italic;
+  }
+
+  .hero-sub {
+    color: #55554c;
+    font-size: 1.1rem;
+    max-width: 46ch;
+    margin: 1.25rem auto 0;
+  }
+
+  .hero-path {
+    position: relative;
+    max-width: 600px;
+    margin: 3rem auto 0;
+  }
+
+  .hero-path svg {
+    width: 100%;
+    height: 60px;
+    display: block;
+  }
+
+  .path-label {
+    position: absolute;
+    top: -6px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #7a7a6e;
+  }
+
+  .path-start {
+    left: 0;
+  }
+
+  .path-end {
+    right: 0;
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .section-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+
+  .categories {
+    background: var(--color-paper-raised);
+  }
+
+  .category-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+    margin-top: 1.5rem;
+  }
+
+  .category-card {
+    background: var(--color-paper);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 1.4rem 1.6rem;
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--color-primary);
+    font-weight: 600;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .category-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  .category-arrow {
+    color: var(--color-accent-dark);
+  }
+
+  .guide-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: 1fr;
+    margin-top: 1.5rem;
+  }
+
+  .guide-card {
+    display: block;
+    text-decoration: none;
+    color: var(--color-ink);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    background: var(--color-paper);
+  }
+
+  .guide-card:hover {
+    border-color: var(--color-sage);
+  }
+
+  .guide-category {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent-dark);
+    font-weight: 600;
+  }
+
+  .guide-card h3 {
+    font-size: 1.15rem;
+    margin: 0.5rem 0;
+  }
+
+  .guide-card p {
+    color: #5c5c52;
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .empty-state {
+    color: #7a7a6e;
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 700px) {
+    .category-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .guide-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

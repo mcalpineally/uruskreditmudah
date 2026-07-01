@@ -1,0 +1,127 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import siteConfig from '../../config/site.json';
+
+const allGuides = (await getCollection('guides', ({ data }) => data.lang === 'ms')).sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+---
+
+<BaseLayout title="Semua Panduan" description="Semua panduan kad kredit, pinjaman peribadi, AKPK dan pengurusan hutang.">
+  <section class="listing-header">
+    <div class="inner">
+      <h1>Semua Panduan</h1>
+      <div class="filter-chips">
+        <a href="/panduan/" class="chip active">Semua</a>
+        {siteConfig.categories.map((cat) => (
+          <a href={`/panduan/kategori/${cat.slug}/`} class="chip">{cat.name}</a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="listing">
+    <div class="inner">
+      {allGuides.length === 0 ? (
+        <p class="empty-state">Belum ada artikel diterbitkan.</p>
+      ) : (
+        <div class="guide-grid">
+          {allGuides.map((guide) => (
+            <a href={`/panduan/${guide.id}/`} class="guide-card">
+              <span class="guide-category">{guide.data.category}</span>
+              <h2>{guide.data.title}</h2>
+              <p>{guide.data.description}</p>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+
+  .listing-header {
+    background: var(--color-paper-raised);
+  }
+
+  .filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+  }
+
+  .chip {
+    text-decoration: none;
+    color: var(--color-ink);
+    background: var(--color-paper);
+    border: 1px solid var(--color-border);
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .chip.active,
+  .chip:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .guide-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: 1fr;
+  }
+
+  .guide-card {
+    display: block;
+    text-decoration: none;
+    color: var(--color-ink);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    background: var(--color-paper);
+  }
+
+  .guide-card:hover {
+    border-color: var(--color-sage);
+  }
+
+  .guide-category {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent-dark);
+    font-weight: 600;
+  }
+
+  .guide-card h2 {
+    font-size: 1.15rem;
+    margin: 0.5rem 0;
+  }
+
+  .guide-card p {
+    color: #5c5c52;
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .empty-state {
+    color: #7a7a6e;
+  }
+
+  @media (min-width: 700px) {
+    .guide-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

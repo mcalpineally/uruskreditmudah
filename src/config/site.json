@@ -1,0 +1,14 @@
+{
+  "name": "Urus Kredit Mudah",
+  "tagline": "Pengurusan hutang bijak dan mudah untuk anda.",
+  "description": "Panduan mudah faham tentang kad kredit, pinjaman peribadi, AKPK dan pengurusan hutang di Malaysia.",
+  "url": "https://uruskreditmudah.com",
+  "email": "hello@uruskreditmudah.com",
+  "contactPath": "/hubungi-kami/",
+  "categories": [
+    { "name": "Kad Kredit", "slug": "kad-kredit" },
+    { "name": "Pinjaman Peribadi", "slug": "pinjaman-peribadi" },
+    { "name": "AKPK & Muflis", "slug": "akpk-muflis" },
+    { "name": "Tips Kewangan", "slug": "tips-kewangan" }
+  ]
+}

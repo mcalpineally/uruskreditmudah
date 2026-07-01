@@ -1,0 +1,4 @@
+# Add 301 redirects here if any old Hashnode URL slugs
+# don't exactly match the new MDX filenames.
+# Format:
+# /old-slug/ /panduan/new-slug/ 301

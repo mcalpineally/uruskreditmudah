@@ -1,0 +1,47 @@
+---
+interface Props {
+  type?: 'warning' | 'note' | 'tip' | 'important';
+}
+const { type = 'note' } = Astro.props;
+
+const labels: Record<string, string> = {
+  warning: 'Amaran',
+  note: 'Nota',
+  tip: 'Tip',
+  important: 'Penting',
+};
+---
+
+<div class:list={['warning-box', `warning-${type}`]}>
+  <span class="warning-label">{labels[type]}</span>
+  <div class="warning-text"><slot /></div>
+</div>
+
+<style>
+  .warning-box {
+    border-radius: 12px;
+    padding: 1.1rem 1.4rem;
+    margin: 1.5rem 0;
+    border: 1px solid var(--color-border);
+  }
+
+  .warning-warning { background: #fbeee0; border-color: #e6c9a0; }
+  .warning-note { background: var(--color-paper-raised); }
+  .warning-tip { background: #e9f0e9; border-color: #bfd6bf; }
+  .warning-important { background: #fbe4e4; border-color: #e0b3b3; }
+
+  .warning-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.4rem;
+    color: var(--color-primary);
+  }
+
+  .warning-text {
+    color: var(--color-ink);
+  }
+</style>
