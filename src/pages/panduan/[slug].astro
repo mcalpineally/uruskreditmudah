@@ -20,6 +20,16 @@ const formattedDate = guide.data.publishDate.toLocaleDateString('ms-MY', {
   month: 'long',
   year: 'numeric',
 });
+
+// Panduan berkaitan — utamakan artikel dalam kategori sama, lengkapkan dengan yang terbaru.
+const allGuides = await getCollection('guides', ({ data }) => data.lang === 'ms');
+const sameCategory = allGuides
+  .filter((g) => g.id !== guide.id && g.data.category === guide.data.category)
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+const otherCategory = allGuides
+  .filter((g) => g.id !== guide.id && g.data.category !== guide.data.category)
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+const relatedGuides = [...sameCategory, ...otherCategory].slice(0, 4);
 ---
 
 <BaseLayout title={guide.data.title} description={guide.data.description} image={guide.data.image}>
@@ -35,6 +45,22 @@ const formattedDate = guide.data.publishDate.toLocaleDateString('ms-MY', {
     <div class="article-body">
       <Content components={{ Callout, Warning, Takeaways }} />
     </div>
+
+    {relatedGuides.length > 0 && (
+      <aside class="related-guides" aria-label="Panduan berkaitan">
+        <h2>Panduan Berkaitan</h2>
+        <ul class="related-list">
+          {relatedGuides.map((g) => (
+            <li>
+              <a href={`/panduan/${g.id}/`}>
+                <span class="related-cat">{g.data.category}</span>
+                <span class="related-title">{g.data.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    )}
   </article>
 </BaseLayout>
 
@@ -104,5 +130,62 @@ const formattedDate = guide.data.publishDate.toLocaleDateString('ms-MY', {
   .article-body :global(img) {
     width: 100%;
     border-radius: 12px;
+  }
+
+  .related-guides {
+    max-width: 720px;
+    margin: 3.5rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .related-guides h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .related-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .related-list a {
+    display: block;
+    text-decoration: none;
+    color: var(--color-ink);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    background: var(--color-paper);
+  }
+
+  .related-list a:hover {
+    border-color: var(--color-primary);
+  }
+
+  .related-cat {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent-dark);
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+
+  .related-title {
+    display: block;
+    font-weight: 600;
+    font-size: 1.02rem;
+  }
+
+  @media (min-width: 640px) {
+    .related-list {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 </style>
